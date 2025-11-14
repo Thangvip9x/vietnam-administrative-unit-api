@@ -31,26 +31,56 @@ Gọi `GET /api.php` không kèm `action` sẽ trả về thông tin mô tả AP
 **Phản hồi mẫu:**
 
     {
-      "api_name": "Vietnamese Administrative Unit Converter API",
-      "version": "1.0",
-      "documentation": "https://diachi.tuoitreit.vn",
-      "available_endpoints": {
-        "convert": { "method": "GET", "params": ["province_id", "district_id", "ward_id", "subward (optional)"] },
-        "provinces": { "method": "GET" },
-        "districts": { "method": "GET", "params": ["province_id"] },
-        "wards": { "method": "GET", "params": ["province_id", "district_id"] },
-        "info": { "method": "GET" }
-      },
-      "authentication": {
-        "method_1": "Header: X-API-Key",
-        "method_2": "Query parameter: api_key"
-      },
-      "rate_limiting": {
-        "window": "daily",
-        "your_limit": 1000,
-        "used_today": 5,
-        "remaining": 995
-      }
+        "api_name": "Vietnamese Administrative Unit Converter API",
+        "version": "1.0",
+        "documentation": "https:\/\/diachi.tuoitreit.vn",
+        "available_endpoints": {
+            "convert": {
+                "method": "GET",
+                "params": [
+                    "province_id",
+                    "district_id",
+                    "ward_id",
+                    "subward (optional)"
+                ],
+                "description": "Convert old administrative unit to new one"
+            },
+            "provinces": {
+                "method": "GET",
+                "params": [],
+                "description": "Get list of provinces"
+            },
+            "districts": {
+                "method": "GET",
+                "params": [
+                    "province_id"
+                ],
+                "description": "Get list of districts in a province"
+            },
+            "wards": {
+                "method": "GET",
+                "params": [
+                    "province_id",
+                    "district_id"
+                ],
+                "description": "Get list of wards in a district"
+            },
+            "info": {
+                "method": "GET",
+                "params": [],
+                "description": "Get API key usage information"
+            }
+        },
+        "authentication": {
+            "method_1": "Header: X-API-Key",
+            "method_2": "Query parameter: api_key"
+        },
+        "rate_limiting": {
+            "window": "daily",
+            "your_limit": 10000,
+            "used_today": 1344,
+            "remaining": 8656
+        }
     }
 
 * * *
@@ -64,11 +94,25 @@ Gọi `GET /api.php` không kèm `action` sẽ trả về thông tin mô tả AP
     {
       "success": true,
       "data": [
-        { "id": 1, "name": "Hà Nội" },
-        { "id": 79, "name": "Hồ Chí Minh" },
-        { "id": 49, "name": "Quảng Nam" }
+        {
+          "id": "92",
+          "name": "Thành phố Cần Thơ"
+        },
+        {
+          "id": "01",
+          "name": "Thành phố Hà Nội"
+        },
+        {
+          "id": "31",
+          "name": "Thành phố Hải Phòng"
+        },
+        {
+          "id": "79",
+          "name": "Thành phố Hồ Chí Minh"
+        },
+      ...
       ],
-      "count": 3
+      "count": 63
     }
 
 * * *
@@ -77,17 +121,34 @@ Gọi `GET /api.php` không kèm `action` sẽ trả về thông tin mô tả AP
 
     GET /api.php?action=districts&province_id=<PROVINCE_ID>&api_key=YOUR_API_KEY
 
-**Ví dụ:** `/api.php?action=districts&province_id=49&api_key=YOUR_API_KEY`
+**Ví dụ:** `/api.php?action=districts&province_id=01&api_key=YOUR_API_KEY`
 
 **Phản hồi mẫu:**
 
     {
       "success": true,
       "data": [
-        { "id": 502, "name": "Thành phố Tam Kỳ" },
-        { "id": 503, "name": "Thị xã Điện Bàn" }
+        {
+          "id": "271",
+          "name": "Huyện Ba Vì"
+        },
+        {
+          "id": "277",
+          "name": "Huyện Chương Mỹ"
+        },
+        {
+          "id": "018",
+          "name": "Huyện Gia Lâm"
+        },
+        {
+          "id": "274",
+          "name": "Huyện Hoài Đức"
+        },
+       ...
       ],
-      "count": 2
+    
+      "count": 30
+    
     }
 
 * * *
@@ -96,17 +157,28 @@ Gọi `GET /api.php` không kèm `action` sẽ trả về thông tin mô tả AP
 
     GET /api.php?action=wards&province_id=<PROVINCE_ID>&district_id=<DISTRICT_ID>&api_key=YOUR_API_KEY
 
-**Ví dụ:** `/api.php?action=wards&province_id=49&district_id=502&api_key=YOUR_API_KEY`
+**Ví dụ:** `/api.php?action=wards&province_id=01&district_id=007&api_key=YOUR_API_KEY`
 
 **Phản hồi mẫu:**
 
     {
       "success": true,
       "data": [
-        { "id": 20335, "name": "Bàn Thạch" },
-        { "id": 20336, "name": "An Phú" }
+        {
+          "id": "00277",
+          "name": "Phường Bách Khoa"
+        },
+        {
+          "id": "00292",
+          "name": "Phường Bạch Mai"
+        },
+        {
+          "id": "00244",
+          "name": "Phường Bạch Đằng"
+        },
+       ...
       ],
-      "count": 2
+      "count": 15
     }
 
 * * *
@@ -115,28 +187,38 @@ Gọi `GET /api.php` không kèm `action` sẽ trả về thông tin mô tả AP
 
     GET /api.php?action=convert&province_id=<PROVINCE_ID>&district_id=<DISTRICT_ID>&ward_id=<WARD_ID>&api_key=YOUR_API_KEY
 
-**Ví dụ:** `/api.php?action=convert&province_id=49&district_id=502&ward_id=20335&api_key=YOUR_API_KEY`
+**Ví dụ:** `/api.php?action=convert&province_id=01&district_id=007&ward_id=00247&api_key=YOUR_API_KEY`
 
 **Phản hồi mẫu:**
 
     {
       "success": true,
       "data": [
-      {
-        "ward_name": "Bàn Thạch",
-        "ward_code": "20335",
-        "district_name": "Thành phố Tam Kỳ",
-        "province_name": "Thành phố Đà Nẵng",
-        "citation": {
-          "header": "1659/NQ-UBTVQH15: Sắp xếp các đơn vị hành chính cấp xã của thành phố Đà Nẵng",
-          "line": "16. Sắp xếp toàn bộ diện tích tự nhiên, quy mô dân số của phường Tân Thạnh, phường Hòa Thuận và xã Tam Thăng thành phường mới có tên gọi là phường Bàn Thạch."
+        {
+          "ward_name": "Phường Cửa Nam",
+          "ward_code": "00082",
+          "province_name": "Thành phố Hà Nội",
+          "full_address": "Phường Cửa Nam, Thành phố Hà Nội",
+          "citation": {
+            "header": "1656/NQ-UBTVQH15: Sắp xếp các đơn vị hành chính cấp xã của thành phố Hà Nội",
+            "line": "2. Sắp xếp toàn bộ diện tích tự nhiên, quy mô dân số của các phường Hàng Bài, Phan Chu Trinh, Trần Hưng Đạo, một phần diện tích tự nhiên, quy mô dân số của các phường Cửa Nam, Nguyễn Du, Phạm Đình Hổ và phần còn lại của các phường Hàng Bông, Hàng Trống, Tràng Tiền sau khi sắp xếp theo quy định tại khoản 1 Điều này thành phường mới có tên gọi là phường Cửa Nam."
+          }
+        },
+        {
+          "ward_name": "Phường Hai Bà Trưng",
+          "ward_code": "00256",
+          "province_name": "Thành phố Hà Nội",
+          "full_address": "Phường Hai Bà Trưng, Thành phố Hà Nội",
+          "citation": {
+            "header": "1656/NQ-UBTVQH15: Sắp xếp các đơn vị hành chính cấp xã của thành phố Hà Nội",
+            "line": "6. Sắp xếp toàn bộ diện tích tự nhiên, quy mô dân số của phường Đồng Nhân, phường Phố Huế, một phần diện tích tự nhiên, quy mô dân số của các phường Bạch Đằng, Lê Đại Hành, Nguyễn Du, Thanh Nhàn và phần còn lại của phường Phạm Đình Hổ sau khi sắp xếp theo quy định tại khoản 2 Điều này thành phường mới có tên gọi là phường Hai Bà Trưng."
+          }
         }
-      }
       ],
       "api_usage": {
-        "requests_today": 5,
-        "rate_limit": 1000,
-        "remaining": 995
+        "requests_today": 1342,
+        "rate_limit": 10000,
+        "remaining": 8658
       }
     }
 
@@ -151,11 +233,11 @@ Gọi `GET /api.php` không kèm `action` sẽ trả về thông tin mô tả AP
     {
       "success": true,
       "data": {
-        "api_key_name": "Tên người dùng",
-        "rate_limit": 1000,
-        "requests_today": 5,
-        "remaining": 995,
-        "last_request": "2025-11-13 10:00:00"
+        "api_key_name": "tuoitreit",
+        "rate_limit": 10000,
+        "requests_today": 1343,
+        "remaining": 8657,
+        "last_request": "2025-11-14 16:28:31"
       }
     }
 
